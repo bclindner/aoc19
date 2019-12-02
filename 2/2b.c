@@ -1,10 +1,11 @@
-#include <stdio.h>;
-#include "intcode.h";
+#include <stdio.h>
+#include "intcode.h"
 
 int main() {
 	// Read in whole program
 	long baseprogram[4096];
-	int prglen = read_intcode_from_stdin(&baseprogram);
+	read_intcode_from_stdin(baseprogram);
+	// Brute force it - why not, I'm lazy
 	for (int i = 0; i<100; i++) {
 		for (int j=0; j<100; j++) {
 			long program[4096];
@@ -13,7 +14,7 @@ int main() {
 			}
 			program[1] = i;
 			program[2] = j;
-			execute_intcode(&program);
+			execute_intcode(program);
 			if (program[0] == 19690720) {
 				printf("found match! noun=%d, verb=%d\nanswer=%d\n", i, j, 100 * i + j);
 				return 0;
