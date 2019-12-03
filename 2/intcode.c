@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
 enum ops {
@@ -46,20 +47,21 @@ int read_intcode_from_stdin(long program[]){
 void execute_intcode(long program[]){
 	// execute the program:
 	int opidx = 0;
-	int done = 0;
-	while (done == 0) {
-	// printf("[%d] interpreting: %d, %d, %d, %d\n", opidx, program[opidx], program[opidx+1], program[opidx+2], program[opidx+3]);
-	switch (program[opidx]) {
+	while (true) {
+  long opcode = program[opidx++];
+  long op1idx = program[opidx++];
+  long op2idx = program[opidx++];
+  long destidx = program[opidx++];
+	// printf("[%d] interpreting: %ld, %ld, %ld, %ld\n", opidx - 4, opcode, opparam1, opparam2, program[destidx]);
+	switch (opcode) {
 		case ADD:
-			program[program[opidx+3]] = program[program[opidx+1]] + program[program[opidx+2]];
+			program[destidx] = program[op1idx] + program[op2idx];
 			break;
 		case MUL:
-			program[program[opidx+3]] = program[program[opidx+1]] * program[program[opidx+2]];
+			program[destidx] = program[op1idx] * program[op2idx];
 			break;
 		case HALT:
-			done = 1;
-			break;
+      return;
 	}
-	opidx += 4;
 	}
 }
